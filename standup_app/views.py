@@ -9,6 +9,16 @@ from .models import UserProfile
 from .Serializer import UserSerializer
 
 class UserListView(viewsets.ModelViewSet):
-    queryset = UserProfile.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+    	queryset = UserProfile.objects.all()
+    	username = self.request.query_params.get('username')
+    	print username,type(username)
+    	if username:
+    		username1=str(username)
+    		print type(username1)
+    		queryset = UserProfile.objects.filter(username=username1).all()
+    		print queryset
+    	return queryset

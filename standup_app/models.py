@@ -2,6 +2,7 @@
 #author raniniveda
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 
 
 from django.conf import settings
@@ -15,4 +16,8 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 class UserProfile(AbstractUser):
-    mobile_number = models.CharField(blank=True, max_length=10)
+    mobile_number = models.CharField(blank=True, max_length=10,default="")
+    address = JSONField(default=dict)
+    location = JSONField(default=dict)
+    state = models.CharField(blank=True,max_length=20,default="")
+    city = models.CharField(blank=True,max_length=20,default="")
