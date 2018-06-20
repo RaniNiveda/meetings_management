@@ -21,3 +21,15 @@ class UserProfile(AbstractUser):
     location = JSONField(default=dict)
     state = models.CharField(blank=True,max_length=20,default="")
     city = models.CharField(blank=True,max_length=20,default="")
+
+class Employee(models.Model):
+	empid = CharField(max_length=10)
+	name = CharField(max_length=30)
+	
+
+class Salary(models.Model):
+	employee = models.Foreignkey(Employee,on_delete=models.CASCADE)
+	department = CharField(max_length=30)
+	designation = CharField(max_length=30)
+	salary = CharField(max_length=10)
+

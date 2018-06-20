@@ -17,8 +17,9 @@ class UserListView(viewsets.ModelViewSet):
     	username = self.request.query_params.get('username')
     	print username,type(username)
     	if username:
-    		username1=str(username)
-    		print type(username1)
-    		queryset = UserProfile.objects.filter(username=username1).all()
+    		#username1=str(username)
+    		# print username1
+    		# print type(username1)
+    		queryset = queryset.filter(username=str(username))
     		print queryset
     	return queryset
