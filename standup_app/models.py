@@ -23,13 +23,13 @@ class UserProfile(AbstractUser):
     city = models.CharField(blank=True,max_length=20,default="")
 
 class Employee(models.Model):
-	empid = CharField(max_length=10)
-	name = CharField(max_length=30)
+	empid = models.CharField(max_length=10)
+	name = models.CharField(max_length=30)
 	
 
 class Salary(models.Model):
-	employee = models.Foreignkey(Employee,on_delete=models.CASCADE)
-	department = CharField(max_length=30)
-	designation = CharField(max_length=30)
-	salary = CharField(max_length=10)
+	employee = models.ForeignKey(Employee,related_name="salary",on_delete=models.CASCADE)
+	department = models.CharField(max_length=30)
+	designation = models.CharField(max_length=30)
+	salary = models.CharField(max_length=10)
 

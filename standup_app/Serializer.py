@@ -1,6 +1,6 @@
 #author raniniveda
 from rest_framework import serializers
-from .models import UserProfile
+from .models import UserProfile,Employee,Salary
 #import django.contrib.auth.password_validation as validators
 
 class UserSerializer(serializers.ModelSerializer):
@@ -32,12 +32,23 @@ class UserSerializer(serializers.ModelSerializer):
         write_only_fields=('password',)
 
 class EmployeeSerializer(serializers.ModelSerializer):
+    #salary = serializers.StringRelatedField(many=True)
     class Meta:
         model = Employee
-        fields = ('empid','name')
+        fields = ('empid','name','salary')
 
-class SalarySerializer(models.ModelSerializer):
-    Employee = EmployeeSerializer()
+    
+
+
+class SalarySerializer(serializers.ModelSerializer):
+    employee = EmployeeSerializer()
     class Meta:
         model = Salary
-        fields = ('name','empid','department','designation','salary')
+        fields = ('employee','department','designation','salary')
+
+    def create(self, validated_data):
+        emp = validated_data.pop('employee')
+        salary = Employee.objects.create(**validated_data)
+        for emp_data in emp:
+            Salary.objects.create(salary=salary, **emp_data)
+        return salary
