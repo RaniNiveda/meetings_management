@@ -24,11 +24,15 @@ class UserListView(viewsets.ModelViewSet):
 class EmployeeView(viewsets.ModelViewSet):
 	serializer_class = EmployeeSerializer
 	permission_classes = (AllowAny,)
+	
 	def get_queryset(self):
 		queryset = Employee.objects.all()
+		return queryset
 
 class SalaryView(viewsets.ModelViewSet):
 	serializer_class = SalarySerializer
 	permission_classes = (AllowAny,)
+
 	def get_queryset(self):
 		queryset = Salary.objects.all()
+		return queryset
