@@ -25,6 +25,7 @@ class UserProfile(AbstractUser):
 class Employee(models.Model):
 	empid = models.CharField(max_length=10)
 	name = models.CharField(max_length=30)
+
 	
 
 class Salary(models.Model):
@@ -33,3 +34,8 @@ class Salary(models.Model):
 	designation = models.CharField(max_length=30)
 	salary = models.CharField(max_length=10)
 
+class Project(models.Model):
+	emp = models.OneToOneField(Employee,on_delete=models.CASCADE)
+	name = models.CharField(max_length=30)
+	domain=models.CharField(max_length=30)
+	

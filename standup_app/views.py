@@ -5,8 +5,8 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 
-from .models import UserProfile,Employee,Salary
-from .Serializer import UserSerializer,EmployeeSerializer,SalarySerializer
+from .models import UserProfile,Employee,Salary,Project
+from .Serializer import UserSerializer,EmployeeSerializer,SalarySerializer,ProjectSerializer
 
 class UserListView(viewsets.ModelViewSet):
 	serializer_class = UserSerializer
@@ -26,9 +26,18 @@ class EmployeeView(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	def get_queryset(self):
 		queryset = Employee.objects.all()
+		return queryset
 
 class SalaryView(viewsets.ModelViewSet):
 	serializer_class = SalarySerializer
 	permission_classes = (AllowAny,)
 	def get_queryset(self):
 		queryset = Salary.objects.all()
+		return queryset
+
+class ProjectView(viewsets.ModelViewSet):
+	serializer_class = ProjectSerializer
+	permission_classes = (AllowAny,)
+	def get_queryset(self):
+		queryset=Project.objects.all()
+		return queryset

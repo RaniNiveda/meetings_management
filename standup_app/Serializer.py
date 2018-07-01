@@ -1,6 +1,6 @@
 #author raniniveda
 from rest_framework import serializers
-from .models import UserProfile,Employee,Salary
+from .models import UserProfile,Employee,Salary,Project
 #import django.contrib.auth.password_validation as validators
 
 class UserSerializer(serializers.ModelSerializer):
@@ -32,23 +32,40 @@ class UserSerializer(serializers.ModelSerializer):
         write_only_fields=('password',)
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    #salary = serializers.StringRelatedField(many=True)
+    #salary = SalarySerializer(many=True)
+
     class Meta:
         model = Employee
-        fields = ('empid','name','salary')
+        fields = ('empid','name')
+        depth = 1
 
-    
-
+    def create(self, validated_data):
+        sal_data = validated_data.pop('salary')
+        employee = Employee.objects.create(**validated_data)
+        for sal in sal_data:
+            Salary.objects.create(employee=employee, **sal)
+        return employee
 
 class SalarySerializer(serializers.ModelSerializer):
-    employee = EmployeeSerializer()
+    employee=EmployeeSerializer(required=True)
     class Meta:
         model = Salary
         fields = ('employee','department','designation','salary')
+        read_only_fields = ('employee',)
+        depth = 1
 
-    def create(self, validated_data):
-        emp = validated_data.pop('employee')
-        salary = Employee.objects.create(**validated_data)
-        for emp_data in emp:
-            Salary.objects.create(salary=salary, **emp_data)
-        return salary
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+    emp=EmployeeSerializer(required=True)
+    class Meta:
+        model=Project
+        fields = ('emp','name','domain')
+        read_only_fields = ('emp',)
+
+
+
+
+
+
+    
