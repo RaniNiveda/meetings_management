@@ -36,3 +36,10 @@ class SalaryView(viewsets.ModelViewSet):
 	def get_queryset(self):
 		queryset = Salary.objects.all()
 		return queryset
+
+	def perform_create(self,serializer):
+		employee_data = self.request.data.get('employee')		
+		employee = Employee.objects.filter(pk=employee_data)
+		for emp in employee:			
+			emp_obj = emp
+		serializer.save(employee=emp)

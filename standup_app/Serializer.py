@@ -25,22 +25,19 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('email', 'username','mobile_number','password','id','last_login','is_superuser','first_name','last_name','is_staff','is_active','date_joined','mobile_number','address','location','state','city')
         write_only_fields=('password',)
 
-class SalarySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Salary
-        fields = ('id','employee','department','designation','salary')
-        read_only_fields = ('employee',)
-        depth = 1
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    salary = SalarySerializer(many=True)
+    #salary = SalarySerializer(many=True)
     class Meta:
         model = Employee
-        fields = ('id','empid','name','salary')
+        fields = ('id','empid','name')
         depth = 1
-    def create(self, validated_data):
-        salary_data = validated_data.pop('salary')
-        employee = Employee.objects.create(**validated_data)
-        for sal in salary_data:
-            Salary.objects.create(employee=employee, **sal)
-        return employee
+    
+
+class SalarySerializer(serializers.ModelSerializer):
+    employee = EmployeeSerializer(read_only=True)
+    class Meta:
+        model = Salary
+        fields = ('id','department','designation','salary','employee')
+        depth = 1
+    
