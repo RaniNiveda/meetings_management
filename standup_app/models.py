@@ -3,8 +3,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.postgres.fields import JSONField
-
-
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -34,8 +32,9 @@ class Salary(models.Model):
 	designation = models.CharField(max_length=30)
 	salary = models.CharField(max_length=10)
 
+
 class Project(models.Model):
-	emp = models.OneToOneField(Employee,on_delete=models.CASCADE)
+	employee = models.OneToOneField(Employee,related_name="project",on_delete=models.CASCADE)
 	name = models.CharField(max_length=30)
 	domain=models.CharField(max_length=30)
-	
+

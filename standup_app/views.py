@@ -24,16 +24,27 @@ class UserListView(viewsets.ModelViewSet):
 class EmployeeView(viewsets.ModelViewSet):
 	serializer_class = EmployeeSerializer
 	permission_classes = (AllowAny,)
+	
 	def get_queryset(self):
 		queryset = Employee.objects.all()
 		return queryset
 
+	
+
 class SalaryView(viewsets.ModelViewSet):
 	serializer_class = SalarySerializer
 	permission_classes = (AllowAny,)
+
 	def get_queryset(self):
 		queryset = Salary.objects.all()
 		return queryset
+
+	def perform_create(self,serializer):
+		employee_data = self.request.data.get('employee')		
+		employee = Employee.objects.filter(pk=employee_data)
+		for emp in employee:			
+			emp_obj = emp
+			serializer.save(employee=emp)
 
 class ProjectView(viewsets.ModelViewSet):
 	serializer_class = ProjectSerializer
@@ -41,3 +52,11 @@ class ProjectView(viewsets.ModelViewSet):
 	def get_queryset(self):
 		queryset=Project.objects.all()
 		return queryset
+
+	def perform_create(self,serializer):
+		employee_data1 = self.request.data.get('employee')		
+		employee1 = Employee.objects.filter(pk=employee_data1)
+		for emp1 in employee1:			
+			serializer.save(employee=emp1)
+
+	
