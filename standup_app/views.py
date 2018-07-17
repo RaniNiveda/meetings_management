@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
+from rest_framework import serializers
 
 from .models import UserProfile,Employee,Salary,Project
 from .Serializer import UserSerializer,EmployeeSerializer,SalarySerializer,ProjectSerializer
@@ -26,7 +27,7 @@ class EmployeeView(viewsets.ModelViewSet):
 	permission_classes = (AllowAny,)
 	
 	def get_queryset(self):
-		queryset = Employee.objects.all()
+		queryset = Employee.emp_objects.all()
 		return queryset
 
 	
@@ -54,9 +55,12 @@ class ProjectView(viewsets.ModelViewSet):
 		return queryset
 
 	def perform_create(self,serializer):
-		employee_data1 = self.request.data.get('employee')		
+		employee_data1 = self.request.data.get('employee')
 		employee1 = Employee.objects.filter(pk=employee_data1)
-		for emp1 in employee1:			
+		queryset=Project.objects.filter(employee_id=employee_data1)
+		if queryset:
+			raise serializers.ValidationError("Duplicate data for employee")
+		for emp1 in employee1:	
 			serializer.save(employee=emp1)
 
 	

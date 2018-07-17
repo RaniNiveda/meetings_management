@@ -20,11 +20,16 @@ class UserProfile(AbstractUser):
     state = models.CharField(blank=True,max_length=20,default="")
     city = models.CharField(blank=True,max_length=20,default="")
 
+class EmployeeManager(models.Manager):
+    def get_queryset(self):
+        return super(EmployeeManager,self).get_queryset().filter(name='darika')
+
 class Employee(models.Model):
 	empid = models.CharField(max_length=10)
 	name = models.CharField(max_length=30)
 
-	
+	#objects = models.Manager()
+	emp_objects = EmployeeManager()
 
 class Salary(models.Model):
 	employee = models.ForeignKey(Employee,related_name="salary",on_delete=models.CASCADE)

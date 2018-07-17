@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from .models import UserProfile,Employee,Salary,Project                                                                                                                                                                                                                                                                                                                                                                                                            
 #import django.contrib.auth.password_validation as validators
-from .models import UserProfile,Employee,Salary,Project
+#from .models import UserProfile,Employee,Salary,Project
 
 class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
@@ -54,10 +54,21 @@ class SalarySerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
     employee=EmployeeSerializer
+    # def validate_employee(self,validated_data):
+    #     queryset=Project.objects.filter(employee_id=int(validated_data))
+    #     if queryset:
+    #         raise serializers.ValidationError("Duplicate data for employee")
+    #     return super(EmployeeSerializer, self).validate_employee(validated_data)
+
     class Meta:
         model=Project
         fields = ('employee','name','domain')
         read_only_fields = ('employee',)
+        depth = 1
+
+
+
+
 
 
     
